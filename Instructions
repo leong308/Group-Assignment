@@ -2,9 +2,10 @@ Before you want to edit
 
 put (Example)
 // Zi Qi editing
-into the Main Code.cpp
+into the first line in Main Code.cpp
 
 remove it after finish editing
+so that there will be no overlap at the same time
 
 
 
