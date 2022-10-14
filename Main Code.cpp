@@ -1,5 +1,3 @@
-// ZI QI editing
-
 #include <iostream> 
 #include <iomanip> 
 #include <string>
@@ -12,6 +10,7 @@ int main()
 		string movA, movB, movC, date, dur, stime, etime, turl1, turl2, turl3, lang1, lang2, subt;
 		unsigned int space;
 		int mdetail, ticket1, ticket2, ticket3;
+		double studentp, staffp, childp, adultp, d10, d20;
 	
 		// declare values into var
 		movA = "Movie A";
@@ -28,6 +27,8 @@ int main()
 		turl1 = "start https://github.com/leong308/";
 		turl2 = "start https://github.com/leong308/";
 		turl3 = "start https://github.com/leong308/";
+		studentp = 10, staffp = 12, childp = 6, adultp = 15;	// ticket prices
+		d10 = 0.90, d20 = 0.80;									// ticket discounts
 	
 		cout << "Welcome!" << endl;
 		
@@ -77,9 +78,11 @@ int main()
 														break;
 											default:	cout << "\nInvalid input. Please try again." << endl;
 														break;
-										}	
-										
-											// open trailer url
+										}			
+									}
+									while(mdetail < 1 || mdetail > 3);		
+									
+										// open trailer url
 											do{
 												cout << "\nDo you want to play the trailer? Enter 'Y' for yes or 'N' for no." << endl;
 												cin >> trailer;
@@ -110,9 +113,7 @@ int main()
 												else if(proceed == 'B')
 												mlist = 'X';
 											}
-											while(proceed != 'P' && proceed != 'B');
-									}
-									while(mdetail < 1 || mdetail > 3);				
+											while(proceed != 'P' && proceed != 'B');		
 								break;
 								
 					// ask whether user want to proceed or back to selection           
@@ -120,7 +121,7 @@ int main()
 									cout << "\nEnter P if you want to proceed to payment." << endl;
 									cout << "Enter B if you want to go back to menu." << endl;
 									cin >> proceed;
-									
+						
 									if(proceed != 'P' && proceed != 'B')
 										cout << "\nInvalid input. Please try again." << endl;
 		            					
