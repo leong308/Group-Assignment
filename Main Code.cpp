@@ -1,5 +1,3 @@
-// ZI QI editing
-
 #include <iostream> 
 #include <iomanip>	// manipulate output
 #include <ios>		// for stream size
@@ -11,14 +9,14 @@ int main()
 	{
 		// declare variables
 		
-		char menu, proceed, trailer;						// main menu, proceed to next part, movie trailer
+		char menu, proceed, trailer, tcat;					// main menu, proceed to next part, movie trailer, ticket category
 		string movA, movB, movC;							// 3 movies title
 		string date, dur, stime, etime;						// date, duration, start time, end time
 		string turl1, turl2, turl3;							// movie trailers url
 		string lang1, lang2, subt;							// languages and subtitles
 		int mdetail, ticket1, ticket2, ticket3, selectm;	// movie detial, 3 types of seats left, select movie to purchase
 		int tamount;										// ticket amount
-		double studentp, staffp, childp, adultp, d10, d20;	// categorize prices and discount
+		double studp, staffp, adultp, childp, d10, d20;		// categorize prices and discount
 		
 		// declare values into var
 		movA = "Movie A";
@@ -35,16 +33,18 @@ int main()
 		turl1 = "start https://github.com/leong308/";
 		turl2 = "start https://github.com/leong308/";
 		turl3 = "start https://github.com/leong308/";
-		studentp = 10, staffp = 12, childp = 6, adultp = 15;	// ticket prices
+		studp = 10, staffp = 12, adultp = 15, childp = 6;	// ticket prices
 		d10 = 0.90, d20 = 0.80;									// ticket discounts
+		
+		// modify double output
+		cout << setprecision(2) << fixed;
 		
 		// need modify more
 		cout << "Welcome!" << endl;
 		cout << "_____________________________" << endl;
 		
-		// display section
 		
-		// infinite loop while != Y or N
+		// infinite loop while != L or T or A or P
 		do{
 			// 3 selections in main menu
 			cout << "\nView movie list. Enter 'L'" << endl;
@@ -58,16 +58,19 @@ int main()
 			if(menu != 'L' && menu != 'T' && menu != 'A' && menu != 'P')
 				cout << "Invalid input. Please try again.\n" << endl;
             
-				// Y or N condition
+				// L or T or A or P condition
 				switch(menu)
-				{
+				{	
+					// CASE L IS PARTIALLY DONE (CORE FUNCTION + VALIDITY)
+					// STILL CAN BE MODIFIED
+					
 					// display movie list
 					case 'L':   
 								// infinite loop while mdetail < 1 or > 3
 								do{
 									// infinite loop while mdetail < 1 or > 3
 									/* additional do while branch is needed to prevent
-									   fals overall output while triggers default case */ 
+									   false overall output while triggers default case */ 
 									do{	
 										cout << "\n1. " << movA << endl;
 										cout << "2. " << movB << endl;
@@ -148,12 +151,48 @@ int main()
 								}
 								while(mdetail < 1 || mdetail > 3);
 								break;
-								
+					
+					// CASE T IS COMPLETELY DONE (CORE DISPLAY + VALIDITY)
+					// STILL CAN MODIFY OUTPUT UI
+					
 					// display ticket price         
 					case 'T':	
+								// display table
+								cout << "\n--------Ticket Price List--------" << endl;
+								cout << "_________________________________" << endl;
+								cout << "|   | " << setw(16) << left << "Category"         << setw(2) << " |" << setw(10) << right << "Price  |"	 << endl;
+								cout << "_________________________________" << endl;
+								cout << "| A | " << setw(16) << left << "INTI Student"     << setw(2) << " |" << setw(7) << right << studp  << "  |" << endl;
+								cout << "| B | " << setw(16) << left << "INTI Staff"       << setw(2) << " |" << setw(7) << right << staffp << "  |" << endl;
+								cout << "| C | " << setw(16) << left << "Adult"            << setw(2) << " |" << setw(7) << right << adultp << "  |" << endl;
+								cout << "| D | " << setw(16) << left << "Child (Below 18)" << setw(2) << " |" << setw(7) << right << childp << "  |" << endl;
+								
+								// display notes
+								cout << "\n*NOTES*" << endl;
+								cout << "1. You may purchase more than 1 ticket at once." << endl;
+								cout << "2. You may purchase from different categories at once." << endl;
+								cout << "3. A 20% discount will be given for INTI Student category with more than 5 tickets in one purchase." << endl;
+								cout << "4. A 10% discount will be given for INTI Staff category with more than 5 tickets in one purchase." << endl;
+								
+								do{
+									cout << "\nBack to main menu. Enter 'M'" << endl;
+									cin >> proceed;
+									cin.ignore(numeric_limits<streamsize>::max(), '\n');
+											
+									if(proceed != 'M')
+										cout << "Invalid input. Please try again." << endl;
+									// throw in a false char to force menu to loop again
+									else
+										menu = 'X';
+								}
+								while(proceed != 'M');
+										
+								// reset proceed data to null
+								proceed = 'X';
+								
 								break;   
 					
-					// CASE A IS COMPLETELY DONE (CORE FUNCTION + VALIDITY)
+					// CASE A IS COMPLETELY DONE (CORE DISPLAY + FUNCTION + VALIDITY)
 					// STILL CAN MODIFY OUTPUT UI
 					
 					// display available seats left
@@ -204,6 +243,9 @@ int main()
 								
 								break;
 					
+					// CASE P
+					// MORE VALIDATIONS NEEDED
+					// DONT EXECUTE THIS PART --> WORKING HALFWAY (INCOMPLETE FUNCTIONS OR OUTPUT MIGHT OCCURS)
 					// proceed to payment
 					case 'P':	
 								// choose a movie to purchase
@@ -232,17 +274,28 @@ int main()
 							        }
 							    }
 							    while(selectm != 1 && selectm != 2 && selectm != 3);
-							
+								
+								// need restructure based on category
 							    // insert ticket amount
 							    do{
-							        cout << "How many tickets" << endl;
-							        cin >> tamount;
+							    	cout << "Which category would you like to purchase?" << endl;
+							    	cin >> tcat;
+							    	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+							    	
+							    	do{
+							        	cout << "How many tickets do you want to purchase for this category?" << endl;
+							        	cin >> tamount;
 							
-							        if(tamount <= 0 || tamount > 100)
-							            cout << "Invalid input. Please try again." << endl;
-							    }
-							    while(tamount <= 0 || tamount > 100);
-							
+							        	if(tamount < 0 || tamount > 100)
+							           	 cout << "Invalid input. Please try again." << endl;
+							   		}
+							    	while(tamount < 0 || tamount > 100);
+							    	
+								// need a highly composite switch case
+								// to calculate combination of movie type, category and amount
+								// movie type is not important --> fetch type just to deduct seats left after purchasing
+								}
+								while(tcat != 'A' && tcat != 'B' && tcat != 'C' && tcat != 'D');
 							    // recall back to ask for more purchase
 							    // add if statement another x to have discount
 							
