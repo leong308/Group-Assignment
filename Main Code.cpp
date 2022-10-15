@@ -1,5 +1,3 @@
-// ZI QI editing
-
 #include <iostream> 
 #include <iomanip>	// manipulate output
 #include <ios>		// for stream size
@@ -11,14 +9,15 @@ int main()
 	{
 		// declare variables
 		
-		char menu, proceed, trailer, tcat;					// main menu, proceed to next part, movie trailer, ticket category
-		string movA, movB, movC;							// 3 movies title
-		string date, dur, stime, etime;						// date, duration, start time, end time
-		string turl1, turl2, turl3;							// movie trailers url
-		string lang1, lang2, subt;							// languages and subtitles
-		int mdetail, ticket1, ticket2, ticket3, selectm;	// movie detial, 3 types of seats left, select movie to purchase
-		int tamount;										// ticket amount
-		double studp, staffp, adultp, childp, d10, d20;		// categorize prices and discount
+		char menu, proceed, trailer, tcat;								// main menu, proceed to next part, movie trailer, ticket category
+		string movA, movB, movC;										// 3 movies title
+		string date, dur, stime, etime;									// date, duration, start time, end time
+		string turl1, turl2, turl3;										// movie trailers url
+		string lang1, lang2, subt;										// languages and subtitles
+		int mdetail, ticket1, ticket2, ticket3, selectm;				// movie detial, 3 types of seats left, select movie to purchase
+		int tamount, tamountA, tamountB, tamountC, tamountD, moret;		// ticket amount, another x ticket to discount
+		double studp, staffp, adultp, childp, d10, d20;					// categorize prices and discount
+		double price, tprice;											// temporary price, total price
 		
 		// declare values into var
 		movA = "Movie A";
@@ -32,6 +31,7 @@ int main()
 		lang2 = "Language: CN";
 		subt = "Subtitle: EN & CN & BM";
 		ticket1 = 100, ticket2 = 100, ticket3 = 100;
+		tamount = 0, tamountA = 0, tamountB = 0, tamountC = 0, tamountD = 0;
 		turl1 = "start https://github.com/leong308/";
 		turl2 = "start https://github.com/leong308/";
 		turl3 = "start https://github.com/leong308/";
@@ -274,8 +274,6 @@ int main()
 							            default:    cout << "Invalid input. Please try again." << endl;
 							                        break;
 							        }
-							    }
-							    while(selectm != 1 && selectm != 2 && selectm != 3);
 								
 								// need restructure based on category
 							    // insert ticket amount
@@ -289,10 +287,71 @@ int main()
 							        	cin >> tamount;
 							
 							        	if(tamount < 0 || tamount > 100)
-							           	 cout << "Invalid input. Please try again." << endl;
+							           		cout << "Invalid input. Please try again." << endl;
 							   		}
 							    	while(tamount < 0 || tamount > 100);
 							    	
+							    	switch(tcat)
+									{
+							    		case 'A':	price = tamount * studp;
+							    					tprice = tprice + price;
+							    					tamountA = tamountA + tamount;
+							    					break;
+							    		case 'B':	price = tamount * staffp;
+							    					tprice = tprice + price;
+							    					tamountB = tamountB + tamount;
+							    					break;
+							    		case 'C':	price = tamount * adultp;
+							    					tprice = tprice + price;
+							    					tamountC = tamountC + tamount;
+							    					break;
+							    		case 'D':	price = tamount * childp;
+							    					tprice = tprice + price;
+							    					tamountD = tamountD + tamount;
+							    					break;
+									}
+									
+									// make a table to display
+									cout << "\nYou had added " << tamountA << " tickets from INTI Student Category into your purchase list." << endl;
+									cout << "You had added " << tamountB << " tickets from INTI Staff Category into your purchase list." << endl;
+									cout << "You had added " << tamountC << " tickets from Adult Category into your purchase list." << endl;
+									cout << "You had added " << tamountD << " tickets from Child (Below 18) Category innto your purchase list." << endl;
+									
+									if(tamountA < 6 && tamountA != 0){
+										moret =  6 - tamountA;
+										cout << "\nYou will get a 20% discount if you purchase another " << moret << " tickets from INTI Student category.";
+									}
+									else if(tamountA > 5)
+										cout << "\nYou are eligible for the 20% discount because the amount of tickets for INTI Student category is "
+										<< tamountA << " tickets.";
+										
+									if(tamountB < 6 && tamountB != 0){
+										moret =  6 - tamount;
+										cout << "\nYou will get a 10% discount if you purchase another " << moret << " tickets from INTI Staff category.";
+									}
+									else if(tamountB > 5)
+										cout << "\nYou are eligible for the 20% discount because the amount of tickets for INTI Staff category is "
+										<< tamountB << " tickets.";	
+									
+									do{
+										cout << "\n\nDo you still want to purchase more tickets? Enter 'T'" << endl;
+										cout << "Proceed to payment. Enter 'P'" << endl;
+										cin >> proceed;
+										cin.ignore(numeric_limits<streamsize>::max(), '\n');
+												
+										if(proceed != 'T' && proceed != 'P')
+											cout << "Invalid input. Please try again." << endl;
+										// throw in a false char to force tcat to loop again
+										else if(proceed == 'T')
+											selectm = 0;
+										// throw in a false char to force menu to loop again
+										else
+											menu = 'X';
+									}
+									while(proceed != 'T' && proceed != 'P');
+										
+									// reset proceed data to null
+									proceed = 'X';
 								// need a highly composite switch case
 								// to calculate combination of movie type, category and amount
 								// movie type is not important --> fetch type just to deduct seats left after purchasing
@@ -305,6 +364,8 @@ int main()
 							    // deduct seats booked
 							
 							    // output
+							    }
+							    while(selectm != 1 && selectm != 2 && selectm != 3);
 								break;  
 				}       									
 		}  
