@@ -1,14 +1,14 @@
-// ZI QI editing
-
 #include <iostream> 
-#include <iomanip> 
+#include <iomanip>	// manipulate output
+#include <ios>		// for stream size
+#include <limits>	// for numeric limits
 #include <string>
 using namespace std;
 
 int main() 
-{ 
+	{
 		// declare variables
-		char mlist, proceed, trailer;
+		char menu, proceed, trailer;
 		string movA, movB, movC, date, dur, stime, etime, turl1, turl2, turl3, lang1, lang2, subt;
 		unsigned int space;
 		int mdetail, ticket1, ticket2, ticket3;
@@ -31,33 +31,44 @@ int main()
 		turl3 = "start https://github.com/leong308/";
 		studentp = 10, staffp = 12, childp = 6, adultp = 15;	// ticket prices
 		d10 = 0.90, d20 = 0.80;									// ticket discounts
-	
+		
+		// need modify more
 		cout << "Welcome!" << endl;
+		cout << "_____________________________" << endl;
 		
 		// display section
 		
 		// infinite loop while != Y or N
 		do{
-			cout << "\nDo you want to see the movie list? Y or N" << endl;
-			cin >> mlist;
-
-			if(mlist != 'Y' && mlist != 'N')
+			// 3 selections in main menu
+			cout << "\nView movie list. Enter 'L'" << endl;
+			cout << "View ticket price. Enter 'T'" << endl;
+			cout << "Buy ticket now! Enter 'P'" << endl;
+			cout << "\nYour selection: ";
+			cin >> menu;
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			
+			if(menu != 'L' && menu != 'T' && menu != 'P')
 				cout << "Invalid input. Please try again.\n" << endl;
             
 				// Y or N condition
-				switch(mlist)
+				switch(menu)
 				{
 					// display movie list
-					case 'Y':   cout << "\n1. " << movA << endl;
-								cout << "2. " << movB << endl;
-								cout << "3. " << movC << endl;
-		            				
+					case 'L':   // infinite loop while mdetail < 1 or > 3
+								do{
 									// infinite loop while mdetail < 1 or > 3
-									do{
-			            				cout << "\nEnter the number of a movie for more details." << endl;
-			            				cin >> mdetail;
+									/* additional do while branch is needed to prevent
+									   fals overall output while triggers default case */ 
+									do{	
+										cout << "\n1. " << movA << endl;
+										cout << "2. " << movB << endl;
+										cout << "3. " << movC << endl;
+									
+		            					cout << "\nEnter the number of a movie for more details." << endl;
+		            					cin >> mdetail;
 			            			
-			            				// movie details selection
+										// movie details selection
 			            				switch(mdetail)
 										{
 											case  1:	cout << endl << movA << endl;										// movieA name and date
@@ -78,64 +89,65 @@ int main()
 														cout << date << endl << stime << setw(space = 20) << etime << endl;	// date, start and end time
 														cout << "Seats left: " << ticket3 << endl;							// seats left
 														break;
-											default:	cout << "\nInvalid input. Please try again." << endl;
+											default:	cout << "\nInvalid input. Please try again." << endl;										
 														break;
-										}			
+										}				
 									}
-									while(mdetail < 1 || mdetail > 3);		
+									while(mdetail < 1 || mdetail > 3);
 									
-										// open trailer url
-											do{
-												cout << "\nDo you want to play the trailer? Enter 'Y' for yes or 'N' for no." << endl;
-												cin >> trailer;
+										// user can decide to watch movie trailer
+										do{
+											cout << "\nDo you want to play the movie trailer? Enter 'Y' for yes or 'N' for no." << endl;
+											cin >> trailer;
+											cin.ignore(numeric_limits<streamsize>::max(), '\n');
 															
-												if(trailer == 'Y' && mdetail == 1)
-													system(turl1.c_str());
-												else if(trailer == 'Y' && mdetail == 2)
-													system(turl2.c_str());
-												else if(trailer == 'Y' && mdetail == 3)
-													system(turl3.c_str());
-												else if(trailer == 'N')
-													;
-												else
-													cout << "\nInvalid input. Please try again." << endl;
-											}
-											while(trailer != 'Y' && trailer != 'N');
+											if(trailer == 'Y' && mdetail == 1)
+												system(turl1.c_str());
+											else if(trailer == 'Y' && mdetail == 2)
+												system(turl2.c_str());
+											else if(trailer == 'Y' && mdetail == 3)
+												system(turl3.c_str());
+											else if(trailer == 'N')
+												;
+											else
+												cout << "\nInvalid input. Please try again." << endl;
+										}
+										while(trailer != 'Y' && trailer != 'N');
+										// end of movie details section
+										
+										// user choose either back to movie list or main menu
+										// infinite loop if proceed != L or M
+										do{
+											cout << "\nBack to movie list. Enter 'L'" << endl;
+											cout << "Back to main menu. Enter 'M'" << endl;
+											cin >> proceed;
+											cin.ignore(numeric_limits<streamsize>::max(), '\n');
 											
-											// infinite loop if proceed != P or B
-											do{
-												cout << "\nEnter P if you want to proceed to payment." << endl;
-												cout << "Enter B if you want to go back to menu." << endl;
-												cin >> proceed;
-												
-												if(proceed != 'P' && proceed != 'B')
-													cout << "\nInvalid input. Please try again." << endl;
-											
-												// throw in a false char to force the mlist to loop again
-												else if(proceed == 'B')
-												mlist = 'X';
-											}
-											while(proceed != 'P' && proceed != 'B');		
+											if(proceed != 'L' && proceed != 'M')
+												cout << "\nInvalid input. Please try again." << endl;
+										
+											// throw in false int to force mdetail to loop againn
+											else if(proceed == 'L')
+												mdetail = 0;
+											// throw in a false char to force menu to loop again
+											else
+												menu = 'X';
+										}
+										while(proceed != 'L' && proceed != 'M');
+								}
+								while(mdetail < 1 || mdetail > 3);
 								break;
 								
-					// ask whether user want to proceed or back to selection           
-					case 'N':	do{
-									cout << "\nEnter P if you want to proceed to payment." << endl;
-									cout << "Enter B if you want to go back to menu." << endl;
-									cin >> proceed;
-						
-									if(proceed != 'P' && proceed != 'B')
-										cout << "\nInvalid input. Please try again." << endl;
-		            					
-									// throw in a false char to force the mlist to loop again
-									else if(proceed == 'B')
-										mlist = 'X';
-								}
-								while(proceed != 'P' && proceed != 'B');
-								break;      
+					// display ticket price         
+					case 'T':	
+								break;    
+					
+					// proceed to payment
+					case 'P':
+								break;  
 				}       									
 		}  
-		while(mlist != 'Y' && mlist != 'N');
+		while(menu != 'L' && menu != 'T' && menu != 'P');
 		
 		// payment section
 		
