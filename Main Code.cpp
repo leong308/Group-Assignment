@@ -449,6 +449,8 @@ int main()
 												cin >> edit;
 												cin.ignore(numeric_limits<streamsize>::max(), '\n');
 												
+												// need add a condition while tamount() is 0 at first
+												// or else it will cause a death loop here
 												if(edit != 'A' && edit != 'B' && edit != 'C' && edit != 'D')
 													cout << "Invalid input. Please try again." << endl;
 												else{
