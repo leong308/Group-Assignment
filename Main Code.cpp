@@ -1,3 +1,6 @@
+// 80% LOGIC COMPLETED
+// 50% OUTPUT UI COMPLETED
+
 #include <iostream> 
 #include <iomanip>	// manipulate output
 #include <ios>		// for stream size
