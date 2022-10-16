@@ -1,8 +1,3 @@
-// ZI QI editing
-
-// 80% LOGIC COMPLETED
-// 30% OUTPUT UI COMPLETED
-
 #include <iostream> 
 #include <iomanip>	// manipulate output
 #include <ios>		// for stream size
@@ -14,12 +9,13 @@ int main()
 	{
 		// declare variables
 		
-		char menu, proceed, trailer, tcat;										// main menu, proceed to next part, movie trailer, ticket category
+		char menu, proceed, trailer, tcat, edit, edit2;							// main menu, proceed to next part, movie trailer, ticket category, edit ticket
 		string movA, movB, movC;												// 3 movies title
 		string date, dur, stime, etime;											// date, duration, start time, end time
 		string turl1, turl2, turl3;												// movie trailers url
 		string lang1, lang2, subt;												// languages and subtitles
-		int mdetail, ticket1, ticket2, ticket3, ticketl, selectm;				// movie detial, 3 types of seats left, ticket left, select movie to purchase
+		int mdetail, ticket1, ticket2, ticket3, ticketl;						// movie detial, 3 types of seats left, ticket left,
+		int selectm, tdeduct, tempt;											// select movie to purchase, deduct ticket, temporary int usage
 		int tamount, tamountA, tamountB, tamountC, tamountD, moret, tbought;	// ticket amount, another x ticket to discount
 		double studp, staffp, adultp, childp, d10, d20, dp;						// categorize prices and discount, discounted price
 		double price, tprice, gtprice;											// temporary price, total price, grand total
@@ -52,7 +48,19 @@ int main()
 		
 		// infinite loop while != L or T or A or P
 		do{
-			// 3 selections in main menu
+			// 4 selections in main menu
+			// CAN CONSIDER ADD ADMIN SECTION SELECTION
+			/*
+				Admin section
+				- PASSWORD TO ENTER (MANDATORY)
+				- VIEW EARNING STATUS
+				- PRINT STATEMENT
+				- ADD/MINUS AVAILABLE TICKETS
+				- TERMINATE/END SYSTEM
+				
+				// features can still be added or modify
+				// * not necessary needed
+			*/
 			cout << "\nView movie list. Enter 'L'" << endl;
 			cout << "View ticket price. Enter 'T'" << endl;
 			cout << "View movie that still have available seats. Enter 'A'" << endl;
@@ -67,7 +75,9 @@ int main()
 				// L or T or A or P condition
 				switch(menu)
 				{	
-					// CASE L IS PARTIALLY DONE (CORE FUNCTION + VALIDITY)
+					// CASE L (80%)
+					// PARTIALLY DONE (CORE FUNCTION + VALIDITY) (80%)
+					// NEEED MODIFY OUTPUT UI/UX (10%)
 					// STILL CAN BE MODIFIED
 					
 					// display movie list
@@ -165,8 +175,9 @@ int main()
 								while(mdetail < 1 || mdetail > 3);
 								break;
 					
-					// CASE T IS COMPLETELY DONE (CORE DISPLAY + VALIDITY)
-					// STILL CAN MODIFY OUTPUT UI
+					// CASE T (95%)
+					// COMPLETELY DONE (CORE DISPLAY + VALIDITY)
+					// STILL CAN MODIFY OUTPUT UI/UX (80%)
 					
 					// display ticket price         
 					case 'T':	
@@ -205,8 +216,9 @@ int main()
 								
 								break;   
 					
-					// CASE A IS COMPLETELY DONE (CORE DISPLAY + FUNCTION + VALIDITY)
-					// STILL CAN MODIFY OUTPUT UI
+					// CASE A (95%)
+					// COMPLETELY DONE (CORE DISPLAY + FUNCTION + VALIDITY)
+					// STILL CAN MODIFY OUTPUT UI/UX (70%)
 					
 					// display available seats left
 					case 'A':	
@@ -256,11 +268,13 @@ int main()
 								
 								break;
 					
-					// CASE P
-					// MORE VALIDATIONS NEEDED
-					// ALMOST DONE FOR ADDING TICKET TO PAY (NEED ADD EDIT AND CHANGE BETWEEN MOVIE)
-					// AVOID EXECUTE THIS PART --> WORKING HALFWAY (INCOMPLETE FUNCTIONS OR OUTPUT ERROR MIGHT OCCURS)
+					// CASE P (70%)
+					// NEED IMPROVEMENT IN UI/UX (20%)
+					// NEED TO FIND FOR ANOTHER FEW POSSIBLE VALIDATIONS
+					// ALMOST DONE FOR ADDING TICKET TO PAY (***NEED ADD EDIT AND CHANGE BETWEEN MOVIE)
+					// INCOMPLETE FUNCTIONS OR OUTPUT ERROR MIGHT OCCURS IN THIS SECTION
 					// CAN HELP TO IDENTIFY LOGIC ERRORS
+					
 					// proceed to payment
 					case 'P':	
 								// choose a movie to purchase
@@ -354,28 +368,28 @@ int main()
 									
 									if(tamountA < 6 && tamountA != 0){
 										moret =  6 - tamountA;
-										cout << "\nYou will get a 20% discount if you purchase another " << moret << " tickets from INTI Student category.";
+										cout << "\nYou will get a 20% discount if you purchase another " << moret << " tickets from INTI Student category." << endl;
 									}
 									else if(tamountA > 5)
 										cout << "\nYou are eligible for the 20% discount because the amount of tickets for INTI Student category is "
-										<< tamountA << " tickets.";
+										<< tamountA << " tickets." << endl;
 										
 									if(tamountB < 6 && tamountB != 0){
 										moret =  6 - tamount;
-										cout << "\nYou will get a 10% discount if you purchase another " << moret << " tickets from INTI Staff category.";
+										cout << "\nYou will get a 10% discount if you purchase another " << moret << " tickets from INTI Staff category." << endl;
 									}
 									else if(tamountB > 5)
 										cout << "\nYou are eligible for the 10% discount because the amount of tickets for INTI Staff category is "
-										<< tamountB << " tickets.";	
+										<< tamountB << " tickets." << endl;	
 									
 									do{
-										cout << "\n\nDo you still want to purchase more tickets for this movie? Enter 'T'" << endl;
-										cout << "Edit ticket amount. Enter 'E'" << endl;
+										cout << "\nDo you still want to purchase more tickets for this movie? Enter 'T'" << endl;
+										cout << "Addeed too much ticket to your purchase list? Edit. Enter 'E'" << endl;
 										cout << "Proceed to payment. Enter 'P'" << endl;
 										cin >> proceed;
 										cin.ignore(numeric_limits<streamsize>::max(), '\n');
 												
-										if(proceed != 'T' && proceed != 'P')
+										if(proceed != 'T' && proceed != 'P' && proceed != 'E')
 											cout << "Invalid input. Please try again." << endl;
 										// throw in a false char to force tcat to loop again
 										else if(proceed == 'T')
@@ -383,11 +397,111 @@ int main()
 										// throw in a false char to force menu to loop again
 										else if(proceed == 'P')
 											;
+										else if(proceed == 'E')
+											// throw in E to triggers edit while loop
+											edit2 = 'E';
+										
+										while(edit2 == 'E'){
+											cout << "\n--------Your Purchase List--------" << endl;
+											cout << "_________________________________" << endl;
+											cout << setw(22) << left << "|   | Category"		     << setw(2) << " |" << setw(10) << right << "Amount  |"	 << endl;
+											cout << "_________________________________" << endl;
 											
-										// add a while loop for edit
-										// display added tickets
-										// choose which to edit (another do while loop)
-										// throw in false char after finish edit
+											// only output selected amount
+											// 
+											if(tamountA > 0)
+												cout << setw(22) << left << "| A | INTI Student"     << setw(2) << " |" << setw(7) << right << tamountA << " |" << endl;
+											if(tamountB > 0)
+												cout << setw(22) << left << "| B | INTI Staff"       << setw(2) << " |" << setw(7) << right << tamountB << " |" << endl;
+											if(tamountC > 0)
+												cout << setw(22) << left << "| C | Adult"            << setw(2) << " |" << setw(7) << right << tamountC << " |" << endl;
+											if(tamountD > 0)
+												cout << setw(22) << left << "| D | Child (Below 18)" << setw(2) << " |" << setw(7) << right << tamountD << " |" << endl;
+												
+											// display notes
+											cout << "\n*NOTES*" << endl;
+											cout << "1. You may only deduct additional ticket/s added in this section." << endl;
+											cout << "2. The list above shows your current purchase list status." << endl;
+											
+											// will execute if the while loop once
+											// will not execute at the first round
+											if(!(edit != 'A' && edit != 'B' && edit != 'C' && edit != 'D'))
+												do{
+													cout << "\nContinue to make changes. Enter 'C'" << endl;
+													cout << "Nothing else to make changes. Enter 'Y'" << endl;
+													cin >> proceed;
+													cin.ignore(numeric_limits<streamsize>::max(), '\n');
+													
+													if(proceed != 'C' && proceed != 'Y')
+														cout << "Invalid input. Please try again." << endl;
+													// throw in a false char to trigger while edit loop
+													else if(proceed == 'C')
+														edit = 'X';
+													// throw in a false char into edit2 to end while edit2 loop
+													else
+														edit2 = 'X';
+												}
+												while(proceed != 'C' && proceed != 'Y');
+											
+											// edit section
+											while(edit != 'A' && edit != 'B' && edit != 'C' && edit != 'D'){
+												cout << "\nPlease enter the category that you wish to edit." << endl;
+												cin >> edit;
+												cin.ignore(numeric_limits<streamsize>::max(), '\n');
+												
+												if(edit != 'A' && edit != 'B' && edit != 'C' && edit != 'D')
+													cout << "Invalid input. Please try again." << endl;
+												else{
+													do{
+														cout << "\nPlease enter the amount of addtional tickets." << endl;
+														cin >> tdeduct;
+														
+														// prevent infinite loop if char entered 
+								        				if(cin.fail()){
+								        					tdeduct = -1;				// declare false value to force whole do while to loop again
+								        					cin.clear();				// clear input buffer
+								        					cin.ignore(INT_MAX, '\n'); 	// ignore last input
+														}
+														
+														// deduction area
+														// will not declare tamount() back at here
+														// to prevent false value overwrite tamount()
+														switch(edit){
+															case 'A':	tempt = tamountA;
+																		tempt = tempt - tdeduct;
+																		break;
+															case 'B':	tempt = tamountB;
+																		tempt = tempt - tdeduct;
+																		break;
+															case 'C':	tempt = tamountC;
+																		tempt = tempt - tdeduct;
+																		break;
+															case 'D':	tempt = tamountD;
+																		tempt = tempt - tdeduct;
+																		break;
+														}
+														
+														if(tdeduct <= 0 || tempt < 0)
+															cout << "Invalid input. Please try again." << endl;
+														// declare tamount() back here after validation
+														else
+														{
+															switch(edit){
+																case 'A':	tamountA = tempt;
+																			break;	
+																case 'B':	tamountB = tempt;
+																			break;			
+																case 'C':	tamountC = tempt;
+																			break;
+																case 'D':	tamountD = tempt;
+																			break;
+															}
+														}
+													}
+													while(tdeduct <= 0 || tempt < 0);
+												}
+											}
+										}
 									}
 									while(proceed != 'T' && proceed != 'P' && proceed != 'E');
 										
@@ -415,14 +529,13 @@ int main()
 									price = tamountA * studp;
 									tprice = tprice + price;
 										
-										if(tamountA > 5)
-										{
-										 dp = tprice * d20;
-										 gtprice = gtprice + dp;
+										if(tamountA > 5){
+											dp = tprice * d20;
+											gtprice = gtprice + dp;
 										}
-										else	
-										gtprice = gtprice + tprice;
-									
+										else
+											gtprice = gtprice + tprice;
+											
 									// remove tprice data to prevent overwrite
 									tprice = 0;
 										
@@ -430,13 +543,13 @@ int main()
 									price = tamountB * staffp;
 									tprice = tprice + price;
 									
-										if(tamountB > 5)
-										{
-										 dp = tprice * d10;
-										 gtprice = gtprice + dp;
-									    }
-									    else	
-										gtprice = gtprice + tprice;
+										if(tamountB > 5){
+											dp = tprice * d10;
+											gtprice = gtprice + dp;
+										}
+										else
+											gtprice = gtprice + tprice;
+											
 									// remove tprice data to prevent overwrite
 									tprice = 0;
 									
@@ -461,9 +574,6 @@ int main()
 									// need rediret to other page (TBE)
 									proceed = 'X';
 								}
-							    // calc total
-							    // deduct seats booked
-							
 							    // output
 							    }
 							    while(selectm != 1 && selectm != 2 && selectm != 3);
