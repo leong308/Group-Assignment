@@ -1,4 +1,3 @@
-// Ong Han Long edting
 // 80% LOGIC COMPLETED
 // 50% OUTPUT UI COMPLETED
 
@@ -415,9 +414,13 @@ int main()
 									tprice = tprice + price;
 										
 										if(tamountA > 5)
-											dp = tprice * d20;
-										
-									gtprice = gtprice + dp;
+										{
+										 dp = tprice * d20;
+										 gtprice = gtprice + dp;
+										}
+										else	
+										gtprice = gtprice + tprice;
+									
 									// remove tprice data to prevent overwrite
 									tprice = 0;
 										
@@ -426,9 +429,12 @@ int main()
 									tprice = tprice + price;
 									
 										if(tamountB > 5)
-											dp = tprice * d10;
-											
-									gtprice = gtprice + dp;
+										{
+										 dp = tprice * d10;
+										 gtprice = gtprice + dp;
+									    }
+									    else	
+										gtprice = gtprice + tprice;
 									// remove tprice data to prevent overwrite
 									tprice = 0;
 									
