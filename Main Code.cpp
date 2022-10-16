@@ -1,5 +1,7 @@
+// ZI QI editing
+
 // 80% LOGIC COMPLETED
-// 50% OUTPUT UI COMPLETED
+// 30% OUTPUT UI COMPLETED
 
 #include <iostream> 
 #include <iomanip>	// manipulate output
