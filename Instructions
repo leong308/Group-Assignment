@@ -1,3 +1,5 @@
+!!! DO NOT SHARE CODES TO OUTSIDER !!!
+___________________________________________________________________________________________________________________________________
 Before you want to edit
 
 put (Example)
@@ -7,14 +9,14 @@ then copy ALL of the codes into your DEV C++ to start your work
 
 remove it after finish editing
 so that there will be no overlapping at the same time
-
+___________________________________________________________________________________________________________________________________
 
 After you FINISH or want to STOP editing, paste ALL of the codes (including the updated part) back into the Main Code.cpp file
 
 THEN, go in to Edit History and create a new file
-12-12-1212 - 13:45 - Zi Qi.cpp
+12-12-1212 - 13:45 - ZI QI.cpp
    Date       Time    Name.cpp
    
    
 After file was created, paste the same FULL newest code into the file and click 'Commit New File'.
-This must be done everytime to prevent OVERWRITE.
+This must be done everytime to prevent OVERWRITE and easy to trace back if there's any error or uncertainties in the future.
