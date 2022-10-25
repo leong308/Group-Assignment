@@ -1,5 +1,6 @@
 // ZI QI editing
 
+
 // CASE L (Movie List)  100% DONE (CORE FUNCTION + DISPLAY + VALIDITY)
 //						99% DONE (OUTPUT UI/UX)
 // CASE T (Ticket price) 99% DONE (CURRENTLY PERFECT)
