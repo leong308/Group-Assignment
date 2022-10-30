@@ -355,16 +355,9 @@ int main()
 									           	else if(calct2 > 150)
 									           		cout << error[1] << endl;
 									           	else{
-									           		switch(ccalc){
-									           			case  1:	calccatamt[0] = calccatamt[0] + calct;
-									           						break;
-									           			case  2:	calccatamt[1] = calccatamt[1] + calct;
-									           						break;
-									           			case  3:	calccatamt[2] = calccatamt[2] + calct;
-									           						break;
-									           			case  4:	calccatamt[3] = calccatamt[3] + calct;
-									           						break;
-													}
+									           		for(i = 0; i < 4; i++)
+									           			if(ccalc == i + 1)
+									           				calccatamt[i] = calccatamt[i] + calct;
 													
 									           		// calculator working based on catgories
 													calccattot[0] = calccatamt[0] * categoryp[0];		// INTI Student
@@ -405,7 +398,7 @@ int main()
 									    	while(x < 0 || calct2 > 150);
 									    	
 									    	// user can stop calculation here
-									    	while(stopcalc != 'Y' && stopcalc != 'N'){
+									    	while(stopcalcv == false){
 									    		cout << "Calculation data will be erased if you leave this session." << endl;
 												cout << "\nDo you still want to edit tickets and calculate price? " << endl;
 									    		cout << "\nEnter 'Y' to contiue calculate or 'N' to exit calculator." << endl;
@@ -424,19 +417,19 @@ int main()
 									    		// let ccalc to loop again
 									    		if(stopcalc == 'Y' || stopcalc == 'y')
 									    			ccalc = 0;
-									    		else{
+									    		else if(stopcalc == 'N' || stopcalc == 'n'){
 									    			proceedv = false;
 									    			
 									    			// erase all calculation data to default if exits calculator session
+									    			for(i = 0; i < 4; i++){
+									    				calccatamt[i] = {0};
+														calccattot[i] = {0};
+													}
 													calct = 0, calct2 = 0;
-													calccatamt[4] = {0};
-													calccattot[4] = {0};
 													tcalc = 0;
 												}
 											}
-											// reset stopcalc to false char after leaving while loop
-											// prevent it to directly skip this section during upcoming loops
-											stopcalc = 'X';
+											stopcalcv = false;
 										}
 										while(ccalc < 1 || ccalc > 4);
 									}
@@ -551,14 +544,14 @@ int main()
 														alert = true;
 												}
 										
-										while(finish == true && movv == true){
+										if(finish == true && movv == true){
 											cout << "Unfortunately there is no seat left for this movie." << endl;
 											cout << "Please choose other movie to proceed.\n" << endl;
 											finish = false;
 											movv = false;
 										}
 										
-										while(alert == true && movv == true){
+										if(alert == true && movv == true){
 											cout << "Hurry up! The available seats are running out soon!\n" << endl;
 											alert = false;
 										}	
@@ -883,7 +876,6 @@ int main()
 																		case 'n':
 																		case 'N':	deduct = false;
 																					con = true;
-																					proceed = 'X';
 																					break;
 																		default:	cout << error[0] << endl;
 																					con = false;
@@ -903,11 +895,8 @@ int main()
 										}
 									}
 									while(proceedv == false);
-									
-									if(proceed == 'T' || proceed == 't')
-										proceedv = false;
 								}
-								while(proceedv == false);
+								while(proceed == 'T' || proceed == 't');
 										
 									// enter payment area
 									while(confirm == true){
