@@ -48,15 +48,15 @@ int main()
 	string ldisplay[3] = {"----------------------------"				   ,
 						  "\n========================================\n\n" ,
 						  "\n========================================\n"	};	
-	string movie[3] = {"mov1", "mov2", "mov3"};									// movies
+	string movie[3] = {"Detective Pikachu", "Paskal", "The Climbers"};			// movies
 	string lang[3] = {"EN", "BM", "CN"};										// languages
 	string subt = "EN & BM & CN";												// subtitles
 	string date = "12/12/2022";													// date
 	string dur = "2 hours 30 minutes";											// duration
 	string stime = "19:00", etime = "21:30";									// start time, end time
-	string turl[3] = {"start https://github.com/leong308/",						// movie trailer url
-					  "start https://github.com/leong308/",
-					  "start https://github.com/leong308/"};
+	string turl[3] = {"start https://www.youtube.com/watch?v=1roy4o4tqQM",		// movie trailer url
+					  "start https://www.youtube.com/watch?v=rA4l9M7bWv8",
+					  "start https://www.youtube.com/watch?v=LN0e-Xlu9hA"};
 	bool mdetailv, proceedv;													// validate movie detail input, proceed validation
 	
 	// case t part
@@ -214,11 +214,11 @@ int main()
 										cin >> trailer;
 										cin.ignore(numeric_limits<streamsize>::max(), '\n');
 															
-										if((trailer == 'Y' || trailer == 'y') && mdetail == 'A')
+										if((trailer == 'Y' || trailer == 'y') && j == 0)
 											system(turl[0].c_str());
-										else if((trailer == 'Y' || trailer == 'y') && mdetail == 'B')
+										else if((trailer == 'Y' || trailer == 'y') && j == 1)
 											system(turl[1].c_str());
-										else if((trailer == 'Y' || trailer == 'y') && mdetail == 'C')
+										else if((trailer == 'Y' || trailer == 'y') && j == 2)
 											system(turl[2].c_str());
 										else if(trailer == 'N' || trailer == 'n')												
 											;
