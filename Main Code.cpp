@@ -6,6 +6,8 @@
 //							100% DONE (OUTPUT UI/UX)
 // CASE P (Purchase)     	100% DONE (CORE FUNCTION + DISPLAY + DEDUCT TICKETS + PAYMENT + RECEIPT + TICKETS)
 //							100% DONE (OUTPUT UI/UX)
+// CASE A (Administrator)   100% DONE (CORE FUNCTION + DISPLAY + PRINT COPY)
+//							100% DONE (OUTPUT UI/UX)
 
 #include <iostream> 
 #include <iomanip>	// manipulate output
@@ -19,27 +21,26 @@ int main()
 	int i, j, k, l, m;
 	
 	// validation error msg
-	string error[5] = {"Invalid input. Please try again."														   ,
+	string error[6] = {"Invalid Input. Please try again."														   ,
 					   "You had selected too much tickets. Please try again."									   ,
 					   "No ticket to deduct for this section. Please choose other movie/category and try again."   ,
 					   "You cannot deduct exceed the amount you had chosen. Please try again."					   ,
-					   "Please make your payment."																	};
+					   "Please make your payment."																   ,
+					   "Invalid Password."																			};
 					   
 	// proceed table
-	string pdisplay = "---------------------------------------------------------";	// table designation
-	string proceedm[8] = {"Back to Main Menu"			   , 						// proceed options
-						  "Back to Movie List"			   ,
-						  "Open Calculator"				   ,
-						  "Purchase More Tickets"		   ,
-						  "Addeed Too Much Ticket? Edit."  ,
-						  "Proceed to Payment"			   ,
-						  "Continue to Make Changes."	   ,
-						  "Nothing Else to Make Changes."	};
+	string pdisplay = "---------------------------------------------------------";					// table designation
+	string proceedm[9] = {"Back to Main Menu"			   , "Back to Movie List"			   ,	// proceed options
+						  "Open Calculator"				   , "Purchase More Tickets"		   ,
+						  "Addeed Too Much Ticket? Edit."  , "Proceed to Payment"			   ,
+						  "Continue to Make Changes."	   , "Nothing Else to Make Changes."   ,
+						  "Retry Password."														};
 						  
 	// main menu part
 	char menu;												// take menu input
 	string tdisplay = "--------------------------------";	// table designation
-	bool menuv, welcome;									// validate menu input, welcome swtich
+	string pass;											// input password
+	bool menuv, welcome, passv;									// validate menu input, welcome swtich, password validation
 	
 	// case l part
 	char mdetail, trailer;														// movie detail input, movie trailer decision
@@ -78,27 +79,25 @@ int main()
 	string sdisplay = "----------------------------------------------";		// table designation
 		
 	// case p part
-	char mov;																							// choose movie
-	char cfm;																							// user confirm proceed to payment
-	char psuc;																							// input payment status
+	char mov, cfm, psuc;						// choose movie, user confirm proceed to payment, input payment status
 	string pldisplay[3] = {"------------------------------------------------"						  ,	// table designation
 						   "-------------------------------------------------------------------------",
 						   "------------------------------"											  };
 	string paym[5] = {"Cash", "Credit/Debit Card", "Touch N Go E-Wallet", "Paypal", "Bitcoin"};			// payment method
-	int ticket2[3] = {0};						// available seats (for temporary use)
-	int cat = 0;								// choose category
-	int ticketamt[4][3] = {0};					// ticket amount for category - movie
-	int ticketamt2;								// input ticket amount
-	int tickett = 0;							// total tickets
-	int categoryt[4] = {0}, moviet[3] = {0};	// total tickets - category, total tickets - movie
-	int moret, tdeduct;							// another x tickets to discount, input tickets amount to deduct
-	int row, col;								// input row & column to edit
-	int pmethod;								// choose payment method
-	double total[4] = {0}, gtotal = 0;			// total based on category, grand total
-	bool block = false, movv = true;			// block output, validate choose movie
-	bool finish = false, alert = false;			// ticket finish, lack of ticket alert
-	bool confirm = false, deduct = true;		// confirm to payment, enter edit ticket if true
-	bool con, psucv;							// validate whether to continue, validate payment status
+	int ticket2[3] = {0};								// available seats (for temporary use)
+	int cat = 0;										// choose category
+	int ticketamt[4][3] = {0};							// ticket amount for category - movie
+	int ticketamt2;										// input ticket amount
+	int tickett = 0;									// total tickets
+	int categoryt[4] = {0}, moviet[3] = {0};			// total tickets - category, total tickets - movie
+	int moret, tdeduct;									// another x tickets to discount, input tickets amount to deduct
+	int row, col;										// input row & column to edit
+	int pmethod;										// choose payment method
+	double total[4] = {0}, gtotal = 0;					// total based on category, grand total
+	bool block = false, block2 = false, movv = true;	// block output, validate choose movie
+	bool finish = false, alert = false;					// ticket finish, lack of ticket alert
+	bool confirm = false, deduct = true;				// confirm to payment, enter edit ticket if true
+	bool con, psucv;									// validate whether to continue, validate payment status
 		
 	// receipt
 	string receipt = "receipt";					// receipt base file name
@@ -112,14 +111,22 @@ int main()
 	string tickettxt;				// generated ticket file name
 	string printtick2 = "TICKET";	// generated base ticket ID
 	int printt = 0;					// ticket counter
+	
+	// case a part
+	double acctotal;				// accumulated total
+	int acccategoryt[4] = {0};		// accumulated category tickets
+	int accmoviet[3] = {0};			// accumulated movie tickets
+	int accticketamt[4][3] = {0};	// accumulated ticket amount for category - movie
+	int copy = 0;					// admin-copy counter
+	char pcopy;						// admin decide to print admin-copy
+	string copytxt;					// generated admin-copy file name
+	bool pcopyv;					// valdate pcopy input
 		
 	// modify all double output to 2 dp
 	cout << setprecision(2) << fixed;
-	
 	do{
 		welcome = false;
-		// welcome notes
-		cout << " ********************************************************************** \n\n";
+		cout << " ********************************************************************** \n\n";		// welcome notes
 		cout << " Welcome To The INTI College Penang Movie Day Ticket Purchasing System! \n\n";
 		cout << "          The Movie Day Will Be Held During 12th December 2022          \n";
 		cout << "                         At INTI College Penang                         \n\n";
@@ -129,42 +136,68 @@ int main()
 		cout << "                          GRAB YOUR TICKET NOW!                         \n\n";
 		cout << " ********************************************************************** \n";
 		
-		// infinite loop while != L or T or A or P
+		// main menu loop
 		do{
-			// 4 selections in main menu
-			// CAN CONSIDER ADD ADMIN SECTION SELECTION
-			/*
-				Admin section
-				- PASSWORD TO ENTER (MANDATORY)
-				- VIEW EARNING STATUS
-				- PRINT STATEMENT
-				- ADD/MINUS AVAILABLE TICKETS
-				- TERMINATE/END SYSTEM
-				
-				// features can still be added or modify
-				// **not necessary needed
-			*/
 			cout << "\n======== THE MAIN MENU =========\n" << endl << tdisplay << endl;
-			cout << "| " << setw(20) << left << "Go To..." << " | Enter |" << endl  << tdisplay << endl << tdisplay << endl;
-			cout << "| " << setw(20) << left << "View Movie List" << " |  'L'  |" << endl  << tdisplay << endl;
-			cout << "| " << setw(20) << left << "View Ticket Price" << " |  'T'  |" << endl  << tdisplay << endl;
-			cout << "| " << setw(20) << left << "View Available Seats" << " |  'S'  |" << endl  << tdisplay << endl;
-			cout << "| " << setw(20) << left << "Buy ticket now!" << " |  'P'  |" << endl  << tdisplay << endl;
-			
+			cout << "| " << setw(20) << left << "Go To..." 				<< " | Enter |" << endl << tdisplay << endl << tdisplay << endl;
+			cout << "| " << setw(20) << left << "View Movie List" 		<< " |  'L'  |" << endl << tdisplay << endl;
+			cout << "| " << setw(20) << left << "View Ticket Price" 	<< " |  'T'  |" << endl << tdisplay << endl;
+			cout << "| " << setw(20) << left << "View Available Seats" 	<< " |  'S'  |" << endl << tdisplay << endl;
+			cout << "| " << setw(20) << left << "Buy ticket now!" 		<< " |  'P'  |" << endl << tdisplay << endl;
+			cout << "| " << setw(20) << left << "Administrator Login" 	<< " |  'A'  |" << endl << tdisplay << endl;
 			cout << "\nPlease enter your selection: ";
 			cin >> menu;
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');	// only take first char
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');	// read all input, only take first char
+			
+			// admin validation gate
+			if(menu == 'A' || menu == 'a'){
+				do{
+					cout << "\nPlease enter password: ";
+					cin >> pass;
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					
+					if(pass == "$pass$")
+						passv = true;
+					else{
+						cout << error[5] << endl;
+						do{
+							cout << "\n======================= PROCEED =========================\n" << endl << pdisplay << endl;
+							cout << "| " << setw(45) << left << "Proceed To..." << " | Enter |" << endl << pdisplay << endl << pdisplay << endl;
+							cout << "| " << setw(45) << left << proceedm[8] << " |  'R'  |" << endl << pdisplay << endl;
+							cout << "| " << setw(45) << left << proceedm[0] << " |  'M'  |" << endl << pdisplay << endl;
+							cout << "\nPlease enter your selection: ";
+							cin >> proceed;
+							cin.ignore(numeric_limits<streamsize>::max(), '\n');
+											
+							switch(proceed){
+								case 'r':
+								case 'R':	passv = false;
+											proceedv = true;
+											break;
+								// if user choose back to main menu, erase menu char to force back
+								// set all gate to true to escape do-while loops
+								case 'm':
+								case 'M':	menu = 'X';
+											proceedv = true;
+											passv = true;
+											break;
+								default:	cout << error[0] << endl;
+											proceedv = false;
+							}	
+						}
+						while(proceedv == false);
+					}
+				}
+				while(passv == false);
+			}
             
 				// proceed into selections
 				switch(menu)
-				{	
-					// display movie list
+				{	// display movie list
 					case 'l':
 					case 'L':   do{
-									// additional do while branch is needed
-									// prevent false overall output while triggers default case
 									do{	
-										// movie selection table
+										// choose to view details
 										cout << "\n======== MOVIE LIST ========\n" << endl << ldisplay[0] << endl;
 										cout << "|   | " << setw(20) << left << "Movie Title" << " |" << endl << ldisplay[0] << endl;
 										for(i = 0; i < 3; i++)
@@ -176,7 +209,6 @@ int main()
 		            					cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		            					
 		            					mdetailv = true;
-										// movie details
 			            				switch(mdetail)
 										{
 											case 'a':
@@ -194,7 +226,7 @@ int main()
 									}
 									while(mdetailv == false);
 									
-									// movie details
+									// display movie details
 									for(i = 0; i < 3; i++){
 										if(i == j){
 											cout << ldisplay[1] << setw(15) << left << " Movie" << " : " + movie[i] << endl;
@@ -207,28 +239,24 @@ int main()
 											cout << setw(15) << left << " Seats left" << " : " << ticket[i] << endl << ldisplay[2];
 											}	
 									}
-									
 									// user can watch movie trailer
 									do{
 										cout << "\nDo you want to play the movie trailer? Enter 'Y' for yes or 'N' for no." << endl;
 										cin >> trailer;
 										cin.ignore(numeric_limits<streamsize>::max(), '\n');
-															
-										if((trailer == 'Y' || trailer == 'y') && j == 0)
-											system(turl[0].c_str());
-										else if((trailer == 'Y' || trailer == 'y') && j == 1)
-											system(turl[1].c_str());
-										else if((trailer == 'Y' || trailer == 'y') && j == 2)
-											system(turl[2].c_str());
-										else if(trailer == 'N' || trailer == 'n')												
+										
+										if(trailer == 'Y' || trailer == 'y'){
+											for(i = 0; i < 3; i++)
+												if(i == j){
+													system(turl[i].c_str());
+													cout << "\nMovie trailer had been launched in your browser tab." << endl;
+													cout << "Please head over to your browser to watch the movie trailer." << endl;
+												}
+										}
+										else if(trailer == 'N' || trailer == 'n')
 											;
 										else
 											cout << error[0] << endl;
-										
-										if(trailer == 'Y' || trailer == 'y'){
-											cout << "\nMovie trailer had been launched in your browser tab." << endl;
-											cout << "Please head over to your browser to watch the movie trailer." << endl;
-										}
 									}
 									while(trailer != 'Y' && trailer != 'y' && trailer != 'N' && trailer != 'n');
 										
@@ -245,16 +273,13 @@ int main()
 											
 										switch(proceed){
 											case 'l':
-											case 'L':
+											case 'L':	mdetailv = false;
 											case 'm':
 											case 'M':	proceedv = true;
 														break;
 											default:	cout << error[0] << endl;
 														proceedv = false;
 										}	
-										// force mdetail to loop againn
-										if(proceed == 'l' || proceed == 'L')
-											mdetailv = false;
 									}
 									while(proceedv == false);
 								}
@@ -262,11 +287,10 @@ int main()
 								
 								proceed = 'X';						
 								break;
-					
 					// display ticket price + calculator
 					case 't':        
 					case 'T':	do{
-									// display table
+									// ticket price table
 									cout << "\n======== TICKET PRICE LIST =========\n" << endl << adisplay[0] << endl;
 									cout << "| No. | " << setw(16) << left << "Category" << setw(2) << " |" 
 										 << setw(10) << right << "Price  |" << endl << adisplay[0] << endl;
@@ -303,11 +327,17 @@ int main()
 									
 									// enter calculator
 									if(proceed == 'C' || proceed == 'c'){
-										// additional do while loop required
 										// recall back here if not leaving calculator
 										do{
-											// infinite loop while false tcat input
 											do{
+												// ticket price table
+												cout << "\n======== TICKET PRICE LIST =========\n" << endl << adisplay[0] << endl;
+												cout << "| No. | " << setw(16) << left << "Category" << setw(2) << " |" 
+													 << setw(10) << right << "Price  |" << endl << adisplay[0] << endl;
+												for(i = 0; i < 4; i++)
+													cout << tablec[i] << setw(16) << left << category[i] << setw(2) << " |" 
+														 << setw(7) << right << categoryp[i] << "  |" << endl;
+												cout << adisplay[0] << endl;
 												// display notes
 												cout << "\n*ABOUT THE CALCULATOR*" << endl;
 												cout << "1. You may use this calculator to calculate a certain amount of ticket price." << endl;
@@ -332,9 +362,8 @@ int main()
 									    	// ask user to enter amount of tickets wanted for the specific category
 									    	do{
 												cout << "\nHow many tickets do you want to purchase for this category?" << endl;
-									        	cin >> calct;	        		
-									        		
-									        	// prevent infinite loop if char entered 
+									        	cin >> calct;
+									        	
 									        	if(cin.fail()){
 									        		calct = -999;				// declare false value to force whole do while to loop again
 									        		cin.clear();				// clear input buffer
@@ -372,12 +401,11 @@ int main()
 													
 													calccattot[3] = calccatamt[3] * categoryp[3];		// Child
 													
-													// add into total
+													// total
 													tcalc = calccattot[0] + calccattot[1] + calccattot[2] + calccattot[3];
 													
 													// display table
 													cout << "\n============== PURCHASE LIST SIMULATOR ===============" << endl << endl << adisplay[1] << endl;
-													// first line of table
 													cout << "|     | " << setw(16) << left << "Category" << setw(2) << " | " << setw(5) << right << "Price" << setw(2) 
 														 << " | " << setw(6) << right << "Amount" << setw(2) << " |" << setw(11) << "Total  |" << endl;
 														cout << adisplay[1] << endl;
@@ -397,7 +425,7 @@ int main()
 									   		}
 									    	while(x < 0 || calct2 > 150);
 									    	
-									    	// user can stop calculation here
+									    	// user can leave or stay in calculator
 									    	while(stopcalcv == false){
 									    		cout << "Calculation data will be erased if you leave this session." << endl;
 												cout << "\nDo you still want to edit tickets and calculate price? " << endl;
@@ -440,15 +468,9 @@ int main()
 								proceed = 'X';
 								
 								break;   
-					
-					// CASE S (100%)
-					// COMPLETELY DONE (CORE DISPLAY + VALIDITY)
-					// OUTPUT UI/UX (100%)
-					
 					// display available seats left
 					case 's':
-					case 'S':	// display table
-								// movie table
+					case 'S':	// display movie table
 								cout << "\n============ CHECK AVAILABILITY ==============\n" << endl << sdisplay << endl;
 								cout << "|   | " << setw(20) << left << "Movie Title" << " | Available Seats |" << endl << sdisplay << endl;
 								for(i = 0; i < 3; i++)
@@ -468,13 +490,11 @@ int main()
 									cout << "\nOnly " << movie[0] << " and " << movie[2] << " are still available at this moment." << endl;
 								else if(ticket[2] == 0)
 									cout << "\nOnly " << movie[0] << " and " << movie[1] << " are still available at this moment." << endl;
-								// currently can ignore all == 0
-								// whole while loop will not execute if no ticket left
-								// ^ future add on feature
 								else
 									cout << "\nAll 3 movies are still available at this moment." << endl;
+								// ignore all == 0 output --> program ends if no tickets left
 									
-								// user need to return back to main menu
+								// user must to return back to main menu
 								do{
 									cout << "\n======================= PROCEED =========================\n" << endl << pdisplay << endl;
 									cout << "| " << setw(45) << left << "Proceed To..." << " | Enter |" << endl << pdisplay << endl << pdisplay << endl;
@@ -488,22 +508,15 @@ int main()
 										cout << error[0] << endl;
 								}
 								while(proceed != 'M' && proceed != 'm');
-										
 								// reset proceed data to X
 								proceed = 'X';
 								
 								break;
-					
-					// CASE P (99%)
-					// COMPLETELY DONE (CORE FUNCTION + DISPLAY + DEDUCT TICKETS + PAYMENT + RECEIPT + TICKETS)
-					// OUTPUT UI/UX (100%)
-					
 					// purchase section
 					case 'p':
 					case 'P':	for(i = 0; i < 3; i++)
 									ticket2[i] = ticket[i];
-									
-								// loop if proceed = 'T'
+								// loop back if proceed = 'T'
 								do{	
 									// choose movie
 									do{
@@ -518,23 +531,20 @@ int main()
 										cin >> mov;
 										cin.ignore(numeric_limits<streamsize>::max(), '\n');
 										
+										movv = true;
 										switch(mov){
 											case 'a':
 											case 'A':	j = 0;
-														movv = true;
 														break;
 											case 'b':
 											case 'B':	j = 1;
-														movv = true;
 														break;
 											case 'c':
 											case 'C':	j = 2;
-														movv = true;
 														break;
 											default:	movv = false;
 														cout << error[0] << endl;
 										}
-										
 										if(movv == true)
 											for(i = 0; i < 3; i++)
 												if(i == j){
@@ -543,15 +553,13 @@ int main()
 													else if(ticket2[i] > 0 && ticket2[i] < 10)
 														alert = true;
 												}
-										
 										if(finish == true && movv == true){
 											cout << "Unfortunately there is no seat left for this movie." << endl;
 											cout << "Please choose other movie to proceed.\n" << endl;
 											finish = false;
 											movv = false;
 										}
-										
-										if(alert == true && movv == true){
+										else if(alert == true && movv == true){
 											cout << "Hurry up! The available seats are running out soon!\n" << endl;
 											alert = false;
 										}	
@@ -560,7 +568,6 @@ int main()
 									
 									// choose category
 									do{
-										// display table
 										cout << "\n======== TICKET PRICE LIST =========\n" << endl << adisplay[0] << endl;
 										cout << "| No. | " << setw(16) << left << "Category" << setw(2) << " |" 
 											 << setw(10) << right << "Price  |" << endl << adisplay[0] << endl;
@@ -578,18 +585,16 @@ int main()
 										cout << "\nPlease select a category to add tickets into your purchase list: ";
 										cin >> cat;
 										
-										// prevent infinite loop if char entered 
 									    if(cin.fail()){
+									    	cat = 0;
 									        cin.clear();				// clear input buffer
 									        cin.ignore(INT_MAX, '\n'); 	// ignore last input
 										}
-										
 										if(cat < 1 || cat > 4)
 											cout << error[0] << endl;
 									}
 									while(cat < 1 || cat > 4);
 									
-									// input amount of tickets
 									switch(mov){
 										case 'a':
 										case 'A':	k = 0;
@@ -601,7 +606,6 @@ int main()
 										case 'C':	k = 2;
 													break;
 									}
-									
 									// avoid bunch of duiplicated codes in switch case
 									for(j = 0; j < 3; j++)
 										if(j == k)
@@ -610,14 +614,12 @@ int main()
 													do{
 														cout << "\nPlease insert the ticket amount for this category: ";
 														cin >> ticketamt2;
-																		
-														// prevent infinite loop if char entered 
+														
 														if(cin.fail()){
 															ticketamt2 = -1;
 															cin.clear();				// clear input buffer
 															cin.ignore(INT_MAX, '\n'); 	// ignore last input
-														}
-																		
+														}			
 														if(ticketamt2 < 0)
 															cout << error[0] << endl;
 														else{
@@ -631,9 +633,8 @@ int main()
 													}
 													while(ticketamt2 < 0);
 											}
-									// prevent stacking after first loop
-									// after declaring all to zero
-									// it will recalculate new total in the for loop below
+									// prevent stacking after first loop after declaring all to zero
+									// will recalculate new total in the for loop below
 									for(i = 0; i < 4; i++){
 										tickett = 0;
 										categoryt[i] = 0;
@@ -641,12 +642,9 @@ int main()
 									}
 									for(i = 0; i < 4; i++)
 										for(j = 0; j < 3; j++){
-											// calculate total tickets selected
-											tickett += ticketamt[i][j];
-											// calculate total tickets selected per category
-											categoryt[i] += ticketamt[i][j];
-											// calculate total tickets for the movie
-											moviet[j] += ticketamt[i][j];
+											tickett += ticketamt[i][j];			// calculate total tickets selected
+											categoryt[i] += ticketamt[i][j];	// calculate total tickets selected per category
+											moviet[j] += ticketamt[i][j];		// calculate total tickets for the movie
 										}
 										
 									// display purchase list table
@@ -677,7 +675,23 @@ int main()
 									}
 									else if(categoryt[1] > 5)
 										cout << "\nYou are eligible for the 10% discount for the INTI Staff category tickets." << endl;
+									
+									// update temporary available seats left
+									for(i = 0; i < 3; i++){
+										// prevent over deduct based on movie total
+										// update both moviet[] and ticket2[] at the same time
+										/*	
+											ticket2[i] = 10, moviet = 40 + 9, ticket[i] = 50
 										
+											Example (fail):		-39 = 10 - 49
+											Example (succeed):	9 = 10 - (50 - 49)	--	9 will be the newest added tickets
+																1 = 10 - 9			--  1 will be the temporary remainder for tickets	
+										*/
+										moviet[i] = ticket2[i] - (ticket[i] - moviet[i]);
+										ticket2[i] -= moviet[i];
+									}	
+									if(ticket2[0] == 0 && ticket2[1] == 0 && ticket2[2] == 0)
+										block = true;
 									do{
 										do{
 											// user choose either add more tickets into purchase list
@@ -688,7 +702,9 @@ int main()
 											// block this output if no ticket left
 											if(block == false)
 												cout << "| " << setw(45) << left << proceedm[3] << " |  'T'  |" << endl << pdisplay << endl;
-											cout << "| " << setw(45) << left << proceedm[4] << " |  'E'  |" << endl << pdisplay << endl;
+											// block this output if no ticket left to deduct
+											if(block2 == false)
+												cout << "| " << setw(45) << left << proceedm[4] << " |  'E'  |" << endl << pdisplay << endl;
 											cout << "| " << setw(45) << left << proceedm[5] << " |  'P'  |" << endl << pdisplay << endl;
 											
 											cout << "\nPlease enter your selection: ";
@@ -697,62 +713,66 @@ int main()
 											
 											switch(proceed){
 												case 'p':
-												case 'P':	
+												case 'P':	while(confirm == false){
+																cout << "\nYou cannot make any further changes in your purchase list if you confirm to proceed." << endl;
+																cout << "Are you sure? Enter 'Y' for yes or 'N' for no" << endl;
+																cin >> cfm;
+																cin.ignore(numeric_limits<streamsize>::max(), '\n');
+																
+																switch(cfm){
+																	case 'y':
+																	case 'Y':	confirm = true;
+																				break;
+																	case 'n':
+																	case 'N':	proceedv = false;
+																				proceed = 'X';
+																				break;
+																	default:	confirm = false;
+																				cout << error[0] << endl;
+																}
+															}
+															break;
 												case 't':
-												case 'T':
+												case 'T':	if(block == true){
+																cout << error[0] << endl;
+																proceedv = false;
+															}
+															else
+																proceedv = true;
+															break;
 												case 'e':
-												case 'E':
-															proceedv = true;
+												case 'E':	if(block2 == true){
+																cout << error[0] << endl;
+																proceedv = false;
+															}
+															else
+																proceedv = true;
 															break;
 												default:	proceedv = false;
 															cout << error[0] << endl;
 											}
-											// 
-											while((proceed == 'p' || proceed == 'P') && confirm == false){
-												cout << "\nYou cannot make any further changes in your purchase list if you confirm to proceed." << endl;
-												cout << "Are you sure? Enter 'Y' for yes or 'N' for no" << endl;
-												cin >> cfm;
-												cin.ignore(numeric_limits<streamsize>::max(), '\n');
-												
-												switch(cfm){
-													case 'y':
-													case 'Y':	confirm = true;
-																break;
-													case 'n':
-													case 'N':	proceedv = false;
-																proceed = 'X';
-																break;
-													default:	confirm = false;
-																cout << error[0] << endl;
-												}
-											}
 										}
-										while(proceedv == false);
-										
-										if((proceed == 't' || proceed == 'T') && ticket2[0] == 0 && ticket2[1] == 0 && ticket2[2] == 0)
-											block = true;
-										// update temporary available seats left
-										else if(proceed == 'T' || proceed == 't'){
-											for(i = 0; i < 3; i++){
-												// prevent over deduct based on movie total
-												/*
-													ticket2[i] = 10, moviet = 40 + 9, ticket[i] = 50
-													
-													Example (fail):		-39 = 10 - 49
-													
-													Example (succeed):	9 = 10 - (50 - 49)	--	9 will be the newest added tickets
-																		1 = 10 - 9			--  1 will be the temporary remainder for tickets	
-												*/
-												moviet[i] = ticket2[i] - (ticket[i] - moviet[i]);
-												ticket2[i] -= moviet[i];
-											}
-										}	
+										while(proceedv == false);  
+										block = false;
+										block2 = false;
 										
 										while(proceed == 'E' || proceed == 'e'){
+											// prevent stacking after first loop after declaring all to zero
+											// will recalculate new total in the for loop below
+											for(i = 0; i < 4; i++){
+												tickett = 0;
+												categoryt[i] = 0;
+												moviet[i] = 0;
+											}
+											for(i = 0; i < 4; i++)
+												for(j = 0; j < 3; j++){
+													tickett += ticketamt[i][j];			// calculate total tickets selected
+													categoryt[i] += ticketamt[i][j];	// calculate total tickets selected per category
+													moviet[j] += ticketamt[i][j];		// calculate total tickets for the movie
+												}
 											// display purchase list table
 											cout << "\n============== YOUR PURCHASE LIST ==============\n" << endl << pldisplay[0] << endl;
 											cout << "| Category / Movie |  A  |  B  |  C  |  Total  |" << endl << pldisplay[0] << endl;
-											
 											for(i = 0; i < 4; i++){
 												cout << "| " << setw(16) << left << category[i] << " | ";
 													for(j = 0; j < 3; j++)
@@ -768,20 +788,17 @@ int main()
 											cout << "2. You may only deduct additional ticket/s added in this section." << endl;
 											
 											deduct = true;
-											
 											// edit input
 											while(deduct == true){
 												do{
 													cout << "\nPlease enter the row(category) that you wish to deduct the amount." << endl;
 													cin >> row;
 												
-													// prevent infinite loop if char entered 
 													if(cin.fail()){
 														row = 0;
 														cin.clear();				// clear input buffer
 														cin.ignore(INT_MAX, '\n'); 	// ignore last input
 													}
-												
 													// validate input
 													if(row < 1 || row > 4)
 														cout << error[0] << endl;
@@ -794,13 +811,11 @@ int main()
 													cout << "\nPlease enter the column(movie) that you wish to deduct the amount." << endl;
 													cin >> col;
 													
-													// prevent infinite loop if char entered 
 													if(cin.fail()){
 														col = 0;
 														cin.clear();				// clear input buffer
 														cin.ignore(INT_MAX, '\n'); 	// ignore last input
 													}
-													
 													// validate input
 													if(col < 1 || col > 3)
 														cout << error[0] << endl;
@@ -818,13 +833,11 @@ int main()
 														cout << "Enter the amount of ticket that you wish to deduct: ";
 														cin >> tdeduct;
 														
-														// prevent infinite loop if char entered 
 														if(cin.fail()){
 															tdeduct = -1;
 															cin.clear();				// clear input buffer
 															cin.ignore(INT_MAX, '\n'); 	// ignore last input
 														}
-														
 														if(tdeduct < 0)
 															cout << error[0] << endl;
 														else if(ticketamt[i - 1][j - 1] - tdeduct < 0){
@@ -835,13 +848,13 @@ int main()
 															ticketamt[i - 1][j - 1] -= tdeduct;
 															categoryt[i - 1] -= tdeduct;
 															moviet[j - 1] -= tdeduct;
+															ticket2[j] += tdeduct;
 															
 															// prevent overwrite
 															tickett = 0;
 															for(i = 0; i < 4; i++)
 																for(j = 0; j < 3; j++)
-																// calculate total tickets selected after deduction
-																	tickett += ticketamt[i][j];
+																	tickett += ticketamt[i][j];		// calculate total tickets selected after deduction
 															
 															// display purchase list table
 															cout << "\n============== YOUR PURCHASE LIST ==============\n" << endl << pldisplay[0] << endl;
@@ -883,8 +896,11 @@ int main()
 																}
 																while(con == false);
 															}
-															else if(tickett == 0)
+															else if(tickett == 0){
 																deduct = false;
+																proceed = 'X';
+																block2 = true;
+															}
 														}
 													}
 													while(tdeduct < 0);
@@ -900,6 +916,18 @@ int main()
 										
 									// enter payment area
 									while(confirm == true){
+											// recalculate to prevent ovrwrite
+											for(i = 0; i < 4; i++){
+												tickett = 0;
+												categoryt[i] = 0;
+												moviet[i] = 0;
+											}
+											for(i = 0; i < 4; i++)
+												for(j = 0; j < 3; j++){
+													tickett += ticketamt[i][j];			// calculate total tickets selected
+													categoryt[i] += ticketamt[i][j];	// calculate total tickets selected per category
+													moviet[j] += ticketamt[i][j];		// calculate total tickets for the movie
+												}
 										// update tickets left to main ticket array
 										for(i = 0; i < 3; i++)
 											ticket[i] -= moviet[i];
@@ -973,15 +1001,11 @@ int main()
 										}
 										while(psucv == false);
 										
-										// combine receipt name with count
-										// prevent same file name created
-										// can differenciate based on customer count
-										receipttxt = receipt + to_string(customer) + ".txt";
 										// create receipt
+										receipttxt = receipt + to_string(customer) + ".txt";
 										ofstream fout(receipttxt);
 										// modify file output
 										fout << setprecision(2) << fixed;
-											
 										fout << "================================ RECEIPT ==================================" << endl << endl;
 										fout << "====================== INTI COLLEGE PENANG MOVIE DAY ======================" << endl << endl;
 										fout << "___________________________________________________________________________" << endl << endl;
@@ -989,7 +1013,6 @@ int main()
 										fout << "---------------------------------------------------------------------------" << endl;
 										fout << "| Details     		 	     | Quantity |  Price(RM)  |  Total(RM)  |" << endl;
 										fout << "---------------------------------------------------------------------------" << endl;
-											
 										for(j = 0; j < 3; j++){
 											for(i = 0; i < 4; i++){
 												if(ticketamt[i][j] != 0){
@@ -1008,31 +1031,23 @@ int main()
 										fout << "---------------------------------------------------------------------------" << endl;
 										fout << "| " << setw(32) << left << "Grand Total" << " | " << setw(8) << right 
 											 << tickett << " |             | " << setw(10) << gtotal << "  |" << endl;
-										fout << "---------------------------------------------------------------------------" << endl;
-										fout << "\n\n";
-										// fetch time for receipt
-										// current date/time based on current system
+										fout << "---------------------------------------------------------------------------\n\n\n";
+										// fetch current date/time based on current system for receipt
 										time_t currentt = time(0);
 										// convert currentt to string form
 										char* dt = ctime(&currentt);
 										fout << "Payment made at " << dt << endl;
-										fout << "Payment method: " << paym[pmethod - 1] << endl;
-										fout << "\n\n";
+										fout << "Payment method: " << paym[pmethod - 1] << "\n\n\n";
 										fout << ">>>>>>>>>>>>>>>>>>>>>> THANK YOU FOR YOUR PURCHASE! <<<<<<<<<<<<<<<<<<<<<<<" << endl;
-										fout << ">>>>>>>>>>>>>>>>>>>>> HOPE YOU ENJOY YOUR MOVIE DAY! <<<<<<<<<<<<<<<<<<<<<<" << endl;
-										// end of receipt
+										fout << ">>>>>>>>>>>>>>>>>>>>> HOPE YOU ENJOY YOUR MOVIE DAY! <<<<<<<<<<<<<<<<<<<<<<" << endl;	// end of receipt
 											
-										// create tickets
 										for(i = 0; i < 4; i++)
 											for(j = 0; j < 3; j++)
 												if(ticketamt[i][j] > 0)
 													for(k = ticketamt[i][j]; k > 0; k--){
 														printt++;
-														// combine ticket name with count
-														// prevent same file name created
-														// can differenciate based on customer count
+														// able to print multiple tickets
 														tickettxt = printtick + to_string(printt) + ".txt";
-															
 														// create ticket
 														ofstream fout(tickettxt);
 														fout << setprecision(2) << fixed;
@@ -1041,13 +1056,10 @@ int main()
 																fout << "=";
 															fout << endl;
 														}
-														fout << "\n";
-														fout << "  TICKET   FOR   INTI   COLLEGE   PENANG   MOVIE   DAY";
-														fout << "\n\n";
+														fout << "\n  TICKET   FOR   INTI   COLLEGE   PENANG   MOVIE   DAY\n\n";
 														for(l = 0; l < 56; l++)
 															fout << "=";
-														fout << "\n\n";
-														fout << setw(20) << left << "Ticket ID" << " : " + printtick2 + to_string(printt) << endl;
+														fout << "\n\n" << setw(20) << left << "Ticket ID" << " : " + printtick2 + to_string(printt) << endl;
 														fout << setw(20) << left << "Movie Name" << " : " + movie[j] << endl;
 														fout << setw(20) << left << "Movie Subtitle" << " : " + subt << endl;
 														fout << setw(20) << left << "Movie language" << " : " + lang[i] << endl;
@@ -1056,8 +1068,7 @@ int main()
 														fout << setw(20) << left << "Start time" << " : " + stime << endl;
 														fout << setw(20) << left << "End time" << " : " + etime << endl;
 														fout << setw(20) << left << "Category" << " : " + category[i] << endl;
-														fout << setw(20) << left << "Price per Ticket" << " : RM " << categoryp[i] << endl;
-														fout << "\n";
+														fout << setw(20) << left << "Price per Ticket" << " : RM " << categoryp[i] << "\n\n";
 														for(l = 0; l < 2; l++){
 															for(m = 0; m < 56; m++)
 																fout << "=";
@@ -1066,25 +1077,63 @@ int main()
 													}
 										cout << "\nYour receipt (" << receipttxt << ") had been generated.\n" << endl;
 										cout << "All of your " << tickett << " tickets had been generated.\n" << endl;
-										cout << "Thank you for visiting annd enjoy your movie day!\n" << endl;
+										cout << "Thank you for visiting and enjoy your movie day!\n" << endl;
 										welcome = true;
 											
 										// escape while loop
 										confirm = false;
 										for(i = 0; i < 4; i++){
+											acccategoryt[i] += categoryt[i];
 											categoryt[i] = 0;
 											for(j = 0; j < 3; j++){
+												accticketamt[i][j] += ticketamt[i][j];
+												accmoviet[j] += moviet[j];
 												ticketamt[i][j] = 0;
 												moviet[j] = 0;
 											}
 										}
 										tickett = 0;
+										acctotal += gtotal;	// update accumulated total
 										gtotal = 0;
 										pmethod = 0;
 										customer++;
 									}
 								proceed = 'X';
+								break;		
+					case 'a':
+					case 'A':	cout << "\n================ ADMINISTRATOR =================\n" << endl << pldisplay[0] << endl;
+								cout << setw(33) << left << "| Total Customers: " << " | " << setw(10) << right << customer - 1 << " |\n" << pldisplay[0] << endl;
+								cout << setw(33) << left << "| Total Earnings (RM): " << " | " << setw(10) << right << acctotal << " |\n" << pldisplay[0] << endl;
+								cout << "\n-------------- TOTAL TICKETS SOLD --------------\n" << pldisplay[0] << endl;
+								cout << "| Category / Movie |  A  |  B  |  C  |  Total  |" << endl << pldisplay[0] << endl;
+								for(i = 0; i < 4; i++){
+									cout << "| " << setw(16) << left << category[i] << " | ";
+									for(j = 0; j < 3; j++)
+										cout << setw(2) << right << accticketamt[i][j] << "  | ";
+										cout << setw(6) << acccategoryt[i] << "  |" << endl;
+								}
+								cout << pldisplay[0] << endl << "| Total Tickets    | ";
+								for(i = 0; i < 3; i++)
+									cout << setw(2) << right << accmoviet[i] << "  | ";
+								cout << setw(6) << accmoviet[0] + accmoviet[1] + accmoviet[2] << "  |" << endl << pldisplay[0] << endl;
 								
+								do{
+									cout << "\nDo you want to print a copy? Enter 'Y' or 'N'" << endl;
+									cin >> pcopy;
+									cin.ignore(numeric_limits<streamsize>::max(), '\n');
+									
+									switch(pcopy){
+										case 'Y':
+										case 'y':
+										case 'N':
+										case 'n':	pcopyv = true;
+													break;
+										default :	cout << error[0] << endl;
+													pcopyv = false;
+									}
+								}
+								while(pcopyv == false);
+								welcome = true;
 								break;
 					default:	cout << error[0] << endl;
 				}
@@ -1092,10 +1141,33 @@ int main()
 				
 				if(ticket[0] == 0 && ticket[1] == 0 && ticket[2] == 0)
 					menuv = true;
+				// print while admin want a copy or system end
+				if(pcopy == 'Y' || pcopy == 'y' || (ticket[0] == 0 && ticket[1] == 0 && ticket[2] == 0)){
+					copy++;
+					copytxt = "AdminCopy"+ to_string(copy) + ".txt";
+					ofstream fout(copytxt);
+					fout << setprecision(2) << fixed;
+					fout << "\n================ ADMINISTRATOR =================\n" << endl << pldisplay[0] << endl;
+					fout << setw(33) << left << "| Total Customers: " << " | " << setw(10) << right << customer - 1 << " |\n" << pldisplay[0] << endl;
+					fout << setw(33) << left << "| Total Earnings (RM): " << " | " << setw(10) << right << acctotal << " |\n" << pldisplay[0] << endl;
+					fout << "\n-------------- TOTAL TICKETS SOLD --------------\n" << pldisplay[0] << endl;
+					fout << "| Category / Movie |  A  |  B  |  C  |  Total  |" << endl << pldisplay[0] << endl;
+					for(i = 0; i < 4; i++){
+						fout << "| " << setw(16) << left << category[i] << " | ";
+						for(j = 0; j < 3; j++)
+							fout << setw(2) << right << accticketamt[i][j] << "  | ";
+							fout << setw(6) << acccategoryt[i] << "  |" << endl;
+					}
+					fout << pldisplay[0] << endl << "| Total Tickets    | ";
+					for(i = 0; i < 3; i++)
+						fout << setw(2) << right << accmoviet[i] << "  | ";
+					fout << setw(6) << accmoviet[0] + accmoviet[1] + accmoviet[2] << "  |" << endl << pldisplay[0] << endl;
+					
+					cout << "\nYour copy (" << copytxt << ") had been generated.\n" << endl;
+				}
 		}  
 		while(menuv == false && welcome == false);
-	// always redirect back to welcome page to welcome new customer 
-	// if previous customer had done a payment
+	// always redirect back to welcome page if previous customer had done a payment
 	}
 	while(menuv == false && welcome == true);
 	
