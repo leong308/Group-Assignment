@@ -62,7 +62,7 @@ int main()
 	
 	// case t part
 	char stopcalc;																		// stop calculation input
-	const double categoryp[5] = {10, 12, 15, 6, 0};										// category price (fixed single price)
+	double categoryp[4] = {10, 12, 15, 6};										// category price (fixed single price)
 	double discount[2] = {0.80, 0.90};													// discounts (specific category)
 	string category[4] = {"INTI Student", "INTI Staff", "Adult", "Child (Below 18)"};	// category
 	string tablec[5] = {"|  1. | ", "|  2. | ", "|  3. | ", "|  4. | ", "|  5. | "};	// table count
@@ -237,7 +237,7 @@ int main()
 											cout << setw(15) << left << " Start Time" << " : " + stime << endl;
 											cout << setw(15) << left << " End Time" << " : " + etime << endl;
 											cout << setw(15) << left << " Seats left" << " : " << ticket[i] << endl << ldisplay[2];
-											}	
+										}	
 									}
 									// user can watch movie trailer
 									do{
@@ -713,7 +713,7 @@ int main()
 											
 											switch(proceed){
 												case 'p':
-												case 'P':	while(confirm == false){
+												case 'P':	do{
 																cout << "\nYou cannot make any further changes in your purchase list if you confirm to proceed." << endl;
 																cout << "Are you sure? Enter 'Y' for yes or 'N' for no" << endl;
 																cin >> cfm;
@@ -722,15 +722,18 @@ int main()
 																switch(cfm){
 																	case 'y':
 																	case 'Y':	confirm = true;
+																				proceedv = true;
 																				break;
 																	case 'n':
-																	case 'N':	proceedv = false;
+																	case 'N':	confirm = false;
+																				proceedv = false;
 																				proceed = 'X';
 																				break;
-																	default:	confirm = false;
+																	default:	cfm = 'X';
 																				cout << error[0] << endl;
 																}
 															}
+															while(cfm == 'X');
 															break;
 												case 't':
 												case 'T':	if(block == true){
@@ -1062,7 +1065,7 @@ int main()
 														fout << "\n\n" << setw(20) << left << "Ticket ID" << " : " + printtick2 + to_string(printt) << endl;
 														fout << setw(20) << left << "Movie Name" << " : " + movie[j] << endl;
 														fout << setw(20) << left << "Movie Subtitle" << " : " + subt << endl;
-														fout << setw(20) << left << "Movie language" << " : " + lang[i] << endl;
+														fout << setw(20) << left << "Movie language" << " : " << lang[j] << endl;
 														fout << setw(20) << left << "Date" << " : " + date << endl;
 														fout << setw(20) << left << "Movie Duration" << " : " + dur << endl;
 														fout << setw(20) << left << "Start time" << " : " + stime << endl;
