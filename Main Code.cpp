@@ -190,7 +190,6 @@ int main()
 				}
 				while(passv == false);
 			}
-            
 				// proceed into selections
 				switch(menu)
 				{	// display movie list
@@ -376,7 +375,7 @@ int main()
 														x = calccatamt[i - 1] + calct;
 												// add into total
 												// validate maximum
-													calct2 = calct + calccatamt[0] + calccatamt[1] + calccatamt[2] + calccatamt[3];
+												calct2 = calct + calccatamt[0] + calccatamt[1] + calccatamt[2] + calccatamt[3];
 												// cannot deduct until less than 0
 									        	if(x < 0)
 									           		cout << error[0] << endl;
@@ -833,7 +832,7 @@ int main()
 													}
 												else if(ticketamt[i - 1][j - 1] > 0){
 													do{
-														cout << "Enter the amount of ticket that you wish to deduct: ";
+														cout << "\nEnter the amount of ticket that you wish to deduct: ";
 														cin >> tdeduct;
 														
 														if(cin.fail()){
