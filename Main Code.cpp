@@ -1009,19 +1009,19 @@ int main()
 										ofstream fout(receipttxt);
 										// modify file output
 										fout << setprecision(2) << fixed;
-										fout << "================================ RECEIPT ==================================" << endl << endl;
-										fout << "====================== INTI COLLEGE PENANG MOVIE DAY ======================" << endl << endl;
-										fout << "___________________________________________________________________________" << endl << endl;
-										fout << "\n------------------------------ Purchase List ------------------------------" << endl << endl;
-										fout << "---------------------------------------------------------------------------" << endl;
-										fout << "| Details     		 	     | Quantity |  Price(RM)  |  Total(RM)  |" << endl;
-										fout << "---------------------------------------------------------------------------" << endl;
+										fout << "================================== RECEIPT ====================================" << endl << endl;
+										fout << "======================== INTI COLLEGE PENANG MOVIE DAY ========================" << endl << endl;
+										fout << "_______________________________________________________________________________" << endl << endl;
+										fout << "\n-------------------------------- Purchase List --------------------------------" << endl << endl;
+										fout << "-------------------------------------------------------------------------------" << endl;
+										fout << "| Details     		   	         | Quantity |  Price(RM)  |  Total(RM)  |" << endl;
+										fout << "-------------------------------------------------------------------------------" << endl;
 										for(j = 0; j < 3; j++){
 											for(i = 0; i < 4; i++){
 												if(ticketamt[i][j] != 0){
 													if(categoryt[i] > 5 && i < 2)
 														categoryp2[i] *= discount[i];
-													fout << "| " << setw(32) << left << movie[j] + " - " + category[i] << " | " << setw(8) << right << ticketamt[i][j]
+													fout << "| " << setw(36) << left << movie[j] + " - " + category[i] << " | " << setw(8) << right << ticketamt[i][j]
 														 << " | " << setw(10) << categoryp2[i] << "  | " << setw(10) << total[i] * ticketamt[i][j] / categoryt[i] << "  |" << endl;
 													// reset categoryp value back to initial
 													// prevent overwrite	
@@ -1030,19 +1030,19 @@ int main()
 												}
 											}
 										}
-										fout << "|                                                                         |" << endl;
-										fout << "---------------------------------------------------------------------------" << endl;
-										fout << "| " << setw(32) << left << "Grand Total" << " | " << setw(8) << right 
+										fout << "|                                                                             |" << endl;
+										fout << "-------------------------------------------------------------------------------" << endl;
+										fout << "| " << setw(36) << left << "Grand Total" << " | " << setw(8) << right 
 											 << tickett << " |             | " << setw(10) << gtotal << "  |" << endl;
-										fout << "---------------------------------------------------------------------------\n\n\n";
+										fout << "-------------------------------------------------------------------------------\n\n\n";
 										// fetch current date/time based on current system for receipt
 										time_t currentt = time(0);
 										// convert currentt to string form
 										char* dt = ctime(&currentt);
 										fout << "Payment made at " << dt << endl;
 										fout << "Payment method: " << paym[pmethod - 1] << "\n\n\n";
-										fout << ">>>>>>>>>>>>>>>>>>>>>> THANK YOU FOR YOUR PURCHASE! <<<<<<<<<<<<<<<<<<<<<<<" << endl;
-										fout << ">>>>>>>>>>>>>>>>>>>>> HOPE YOU ENJOY YOUR MOVIE DAY! <<<<<<<<<<<<<<<<<<<<<<" << endl;	// end of receipt
+										fout << ">>>>>>>>>>>>>>>>>>>>>>>> THANK YOU FOR YOUR PURCHASE! <<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
+										fout << ">>>>>>>>>>>>>>>>>>>>>>> HOPE YOU ENJOY YOUR MOVIE DAY! <<<<<<<<<<<<<<<<<<<<<<<<" << endl;	// end of receipt
 											
 										for(i = 0; i < 4; i++)
 											for(j = 0; j < 3; j++)
