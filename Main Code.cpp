@@ -851,7 +851,7 @@ int main()
 															ticketamt[i - 1][j - 1] -= tdeduct;
 															categoryt[i - 1] -= tdeduct;
 															moviet[j - 1] -= tdeduct;
-															ticket2[j] += tdeduct;
+															ticket2[j - 1] += tdeduct;
 															
 															// prevent overwrite
 															tickett = 0;
