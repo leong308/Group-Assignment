@@ -40,7 +40,7 @@ int main()
 	char menu;												// take menu input
 	string tdisplay = "--------------------------------";	// table designation
 	string pass;											// input password
-	bool menuv, welcome, passv;									// validate menu input, welcome swtich, password validation
+	bool menuv, welcome, passv;								// validate menu input, welcome swtich, password validation
 	
 	// case l part
 	char mdetail, trailer;														// movie detail input, movie trailer decision
@@ -62,7 +62,7 @@ int main()
 	
 	// case t part
 	char stopcalc;																		// stop calculation input
-	double categoryp[4] = {10, 12, 15, 6};										// category price (fixed single price)
+	double categoryp[4] = {10, 12, 15, 6};												// category price (fixed single price)
 	double discount[2] = {0.80, 0.90};													// discounts (specific category)
 	string category[4] = {"INTI Student", "INTI Staff", "Adult", "Child (Below 18)"};	// category
 	string tablec[5] = {"|  1. | ", "|  2. | ", "|  3. | ", "|  4. | ", "|  5. | "};	// table count
@@ -79,7 +79,7 @@ int main()
 	string sdisplay = "----------------------------------------------";		// table designation
 		
 	// case p part
-	char mov, cfm, psuc;						// choose movie, user confirm proceed to payment, input payment status
+	char mov, cfm, psuc;								// choose movie, user confirm proceed to payment, input payment status
 	string pldisplay[3] = {"------------------------------------------------"						  ,	// table designation
 						   "-------------------------------------------------------------------------",
 						   "------------------------------"											  };
@@ -190,7 +190,6 @@ int main()
 				}
 				while(passv == false);
 			}
-            
 				// proceed into selections
 				switch(menu)
 				{	// display movie list
@@ -376,7 +375,7 @@ int main()
 														x = calccatamt[i - 1] + calct;
 												// add into total
 												// validate maximum
-													calct2 = calct + calccatamt[0] + calccatamt[1] + calccatamt[2] + calccatamt[3];
+												calct2 = calct + calccatamt[0] + calccatamt[1] + calccatamt[2] + calccatamt[3];
 												// cannot deduct until less than 0
 									        	if(x < 0)
 									           		cout << error[0] << endl;
@@ -833,7 +832,7 @@ int main()
 													}
 												else if(ticketamt[i - 1][j - 1] > 0){
 													do{
-														cout << "Enter the amount of ticket that you wish to deduct: ";
+														cout << "\nEnter the amount of ticket that you wish to deduct: ";
 														cin >> tdeduct;
 														
 														if(cin.fail()){
@@ -1168,6 +1167,7 @@ int main()
 					
 					cout << "\nYour copy (" << copytxt << ") had been generated.\n" << endl;
 				}
+				pcopy = 'X';
 		}  
 		while(menuv == false && welcome == false);
 	// always redirect back to welcome page if previous customer had done a payment
